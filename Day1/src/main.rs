@@ -3,13 +3,16 @@ use std::fs;
 
 fn main() {
     let input_file = fs::read_to_string("input.txt").unwrap();
-    let mut output: String = "empty".to_string();
+    part1(&input_file);
+    part2(&input_file);
+}
 
+fn part1(input: &str){
     // spallte splitte zu 2 vec<i32>
 
     let mut right:Vec<i32> = Vec::new();
     let mut left:Vec<i32> = Vec::new();
-    for line in input_file.lines(){
+    for line in input.lines(){
         let mut i = line.split("   ");
         left.push(i.next().unwrap().parse().unwrap());
         right.push(i.next().unwrap().parse().unwrap());
@@ -26,7 +29,24 @@ fn main() {
         sum += (left[i] - right[i]).abs()
     }
 
-    output = sum.to_string();
+    println!("Part1: {}", sum);
+}
 
-    println!("{}", output);
+fn part2(input: &str){
+    // spallte splitte zu 2 vec<i32>
+
+    let mut right:Vec<i32> = Vec::new();
+    let mut left:Vec<i32> = Vec::new();
+    for line in input.lines(){
+        let mut i = line.split("   ");
+        left.push(i.next().unwrap().parse().unwrap());
+        right.push(i.next().unwrap().parse().unwrap());
+    }
+
+    let mut sum = 0;
+    for l in left{
+        sum += right.iter().filter(|&&r| r == l).count() as i32 * l
+    }
+
+    println!("Part2: {}", sum);
 }
