@@ -1,20 +1,32 @@
 
 use std::fs;
-use std::error::Error;
 
 fn main() {
-    let mut input_file = &read_input_file();
+    let input_file = fs::read_to_string("input.txt").unwrap();
     let mut output: String = "empty".to_string();
 
+    // spallte splitte zu 2 vec<i32>
 
+    let mut right:Vec<i32> = Vec::new();
+    let mut left:Vec<i32> = Vec::new();
+    for line in input_file.lines(){
+        let mut i = line.split("   ");
+        left.push(i.next().unwrap().parse().unwrap());
+        right.push(i.next().unwrap().parse().unwrap());
+    }
 
-    output = input_file.to_string();
+    //sort
+    left.sort_unstable();
+    right.sort_unstable();
 
+    // loop add things
 
+    let mut sum = 0;
+    for i in 0..left.len(){
+        sum += (left[i] - right[i]).abs()
+    }
 
-    print!("{}", output);
-}
+    output = sum.to_string();
 
-fn read_input_file() -> String{
-    return fs::read_to_string("input.txt").unwrap();
+    println!("{}", output);
 }
