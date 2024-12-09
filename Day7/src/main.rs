@@ -23,11 +23,13 @@ fn part1(input: &str){
     for calc in calcs{
         let mut operations = vec![0; calc.1.len() -1];
         let operations_len = operations.len();
+        let mut is_finished = false;
         loop{
             let mut last_result = calc.1[0];
             if count_opperator(&mut operations, 0){
-                break;
+                is_finished = true;
             }
+
             for o in 0..operations_len {
                 let operation = operations[o];
                 let num = calc.1[o+1];
@@ -42,6 +44,9 @@ fn part1(input: &str){
             }
             if last_result == calc.0{
                 sum += last_result;
+                break;
+            }
+            if is_finished {
                 break;
             }
         }
