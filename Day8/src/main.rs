@@ -7,8 +7,6 @@ fn main() {
 }
 
 fn part1(input: &str){
-    let mut sum = 0;
-
     let lines: Vec<Vec<char>> = input.lines()
                                 .map(|s|   
                                     s.chars()
@@ -37,7 +35,7 @@ fn part1(input: &str){
                 antinodes.push(calced_antinode.unwrap());
             }
         }
-    }
+    }  
     
     println!("Part1: {}", antinodes.len());
 }
@@ -56,7 +54,57 @@ fn calc_positions(source: (usize, usize), target: (usize, usize), max_x: usize, 
 } 
 
 fn part2(input: &str){
-    let mut sum = 0;
+    
+    let lines: Vec<Vec<char>> = input.lines()
+                                .map(|s|   
+                                    s.chars()
+                                    .collect()
+                                            )
+                                .collect();
+    let mut satelites: Vec<(char, usize, usize)> = Vec::new();
+    for y in 0..lines.len(){
+        for x in 0..lines[y].len(){
+            if lines[y][x] != '.'{
+                satelites.push((lines[y][x], x , y));
+            }
+        }
+    }
 
-    println!("Part2: {}", sum);
+
+    let mut antinodes: Vec<(usize, usize)> = Vec::new();
+    
+    for sat in &satelites{
+        let same_satelites: Vec<&(char, usize, usize)> = satelites.iter().filter(|s| s.0 == sat.0 && s != &sat).collect();
+
+        for same_sat in same_satelites{
+            let mut calced_antinode ;
+
+            let mut source: (usize, usize) = (sat.1, sat.2);
+            let mut target: (usize, usize) = (same_sat.1, same_sat.2);
+
+            loop{
+
+                calced_antinode = calc_positions(source, target, lines[0].len()-1, lines.len()-1);
+
+                if calced_antinode.is_some() && !antinodes.contains(&calced_antinode.unwrap()) {
+                    antinodes.push(calced_antinode.unwrap());
+                }
+
+                if !antinodes.contains(&target){
+                    antinodes.push(target);
+                }
+
+                match calced_antinode 
+                {
+                    Some(v)  => {  
+                        source = target;
+                        target = v;
+                    },
+                    None => break
+                }
+            }
+        }
+    }  
+
+    println!("Part2: {}", antinodes.len());
 }
